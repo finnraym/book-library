@@ -1,0 +1,17 @@
+server:
+  port: 8088
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/booklibra?currentSchema=develop
+    username: postgres
+    password:
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    url: jdbc:postgresql://localhost:5432/booklibra
+    locations: classpath:db/migration
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+  jpa:
+    hibernate:
+      ddl-auto: validate
