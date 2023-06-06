@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.egorov.booklibrary.web.validation.OnUpdate;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -12,10 +13,12 @@ import java.util.Objects;
 @Data
 @Builder(toBuilder = true)
 public class AuthorDto {
+
+    @NotNull(message = "Id must be not null.", groups = OnUpdate.class)
     private Long id;
-    @NotNull
+    @NotNull(message = "First name must not be null.")
     private String firstName;
-    @NotNull
+    @NotNull(message = "Second name must not be null.")
     private String secondName;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
