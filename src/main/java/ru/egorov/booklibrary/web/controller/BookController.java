@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.egorov.booklibrary.domain.entity.Book;
 import ru.egorov.booklibrary.service.BookService;
+import ru.egorov.booklibrary.utils.consts.StringConstants;
 import ru.egorov.booklibrary.utils.consts.WebConstants;
 import ru.egorov.booklibrary.web.dto.BookDto;
 import ru.egorov.booklibrary.web.mapper.BookMapper;
@@ -77,5 +78,30 @@ public class BookController {
                 .totalPages(books.getTotalPages())
                 .totalElements(books.getTotalElements())
                 .build();
+    }
+
+    @GetMapping("/name")
+    public List<BookDto> getByName(@RequestParam(value = "name", defaultValue = "", required = false) String name) {
+        return bookService.getAllByName(name).stream()
+                .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @GetMapping("/yearOfIssue")
+    public List<BookDto> getByYearOfIssue(@RequestParam(value = "year") Integer year, // TODO MissingServletRequestParameterException need handle: Required request parameter 'year' for method parameter type Integer is not present
+                                          @RequestParam(value = "cmpr", defaultValue = StringConstants.EQUALS, required = false) String cmpr,
+                                          @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
+        return bookService.getAllByYearOfIssue(year, cmpr, sortDir).stream()
+                .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @GetMapping("/numberOfPages")
+    public List<BookDto> getByNumberOfPages(@RequestParam(value = "pages") Integer pages, // TODO MissingServletRequestParameterException need handle: Required request parameter 'year' for method parameter type Integer is not present
+                                            @RequestParam(value = "cmpr", defaultValue = StringConstants.EQUALS, required = false) String cmpr,
+                                            @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
+        return bookService.getAllByNumberOfPages(pages, cmpr, sortDir).stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 }
