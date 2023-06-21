@@ -32,13 +32,13 @@ public class GenreServiceImpl implements GenreService {
 
     @Transactional
     @Override
-    public void saveNewGenre(Genre genre) {
+    public Genre saveNewGenre(Genre genre) {
         List<Genre> genres = genreRepository.findAll();
 
         if (genres.contains(genre)) {
             throw new DataAlreadyExistsException("Genre with name " + genre.getName() + " already exists.");
         }
-        genreRepository.save(genre);
+        return genreRepository.save(genre);
     }
 
     @Transactional

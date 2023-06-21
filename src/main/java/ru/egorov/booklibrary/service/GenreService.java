@@ -6,7 +6,7 @@ public interface GenreService {
 
     Genre getById(Long id);
     Genre getByName(String name);
-    void saveNewGenre(Genre genre);
+    Genre saveNewGenre(Genre genre);
     Genre updateGenre(Genre genre);
     void deleteGenreById(Long id);
 }
