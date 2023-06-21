@@ -1,14 +1,14 @@
 package ru.egorov.booklibrary.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.egorov.booklibrary.domain.entity.Book;
 import ru.egorov.booklibrary.service.BookService;
-import ru.egorov.booklibrary.web.dto.AuthorDto;
+import ru.egorov.booklibrary.utils.consts.WebConstants;
 import ru.egorov.booklibrary.web.dto.BookDto;
 import ru.egorov.booklibrary.web.mapper.BookMapper;
+import ru.egorov.booklibrary.web.response.DataResponse;
 import ru.egorov.booklibrary.web.validation.OnCreate;
 import ru.egorov.booklibrary.web.validation.OnUpdate;
 
@@ -55,5 +55,27 @@ public class BookController {
     @PatchMapping("/{bookId}/genre/{genreId}")
     public Boolean addGenreForBook(@PathVariable Long bookId, @PathVariable Long genreId) {
         return bookService.addGenreForBook(bookId, genreId);
+    }
+
+    @GetMapping("/all")
+    public DataResponse<BookDto> getAll(
+            @RequestParam(value = "pageNo", defaultValue = WebConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = WebConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = WebConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+    ) {
+        DataResponse<Book> books = bookService.getAll(pageNo, pageSize, sortBy, sortDir);
+        List<BookDto> bookDtos = books.getData().stream()
+                .map(bookMapper::toDto)
+                .toList();
+
+        return DataResponse.<BookDto>builder()
+                .data(bookDtos)
+                .last(books.isLast())
+                .pageNo(books.getPageNo())
+                .pageSize(books.getPageSize())
+                .totalPages(books.getTotalPages())
+                .totalElements(books.getTotalElements())
+                .build();
     }
 }

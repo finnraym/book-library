@@ -63,10 +63,8 @@ public class AuthorServiceImpl implements AuthorService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Author> pageAuthors = authorRepository.findAll(pageable);
 
-        List<Author> content = pageAuthors.getContent();
-
         return DataResponse.<Author>builder()
-                .data(content)
+                .data(pageAuthors.getContent())
                 .pageNo(pageAuthors.getNumber())
                 .pageSize(pageAuthors.getSize())
                 .totalElements(pageAuthors.getTotalElements())
