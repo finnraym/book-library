@@ -1,10 +1,6 @@
 package ru.egorov.booklibrary.service;
 
-import ru.egorov.booklibrary.domain.entity.Author;
 import ru.egorov.booklibrary.domain.entity.Book;
-import ru.egorov.booklibrary.domain.entity.Genre;
-
-import java.util.List;
 
 public interface BookService {
 

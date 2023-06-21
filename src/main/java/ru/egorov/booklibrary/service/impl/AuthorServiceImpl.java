@@ -1,13 +1,19 @@
 package ru.egorov.booklibrary.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.egorov.booklibrary.domain.entity.Author;
 import ru.egorov.booklibrary.exception.DataNotFoundException;
 import ru.egorov.booklibrary.repository.AuthorRepository;
 import ru.egorov.booklibrary.service.AuthorService;
+import ru.egorov.booklibrary.web.response.DataResponse;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -46,5 +52,26 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void deleteAuthorById(Long id) {
         authorRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public DataResponse<Author> getAll(int pageNumber, int pageSize, String sortBy, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Author> pageAuthors = authorRepository.findAll(pageable);
+
+        List<Author> content = pageAuthors.getContent();
+
+        return DataResponse.<Author>builder()
+                .data(content)
+                .pageNo(pageAuthors.getNumber())
+                .pageSize(pageAuthors.getSize())
+                .totalElements(pageAuthors.getTotalElements())
+                .totalPages(pageAuthors.getTotalPages())
+                .last(pageAuthors.isLast())
+                .build();
     }
 }

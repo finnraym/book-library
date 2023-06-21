@@ -13,7 +13,6 @@ import ru.egorov.booklibrary.service.AuthorService;
 import ru.egorov.booklibrary.service.BookService;
 import ru.egorov.booklibrary.service.GenreService;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
