@@ -20,4 +20,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByNumberOfPagesEquals(Integer numberOfPages, Sort sort);
     List<Book> findAllByNumberOfPagesGreaterThan(Integer numberOfPages, Sort sort);
     List<Book> findAllByNumberOfPagesLessThan(Integer numberOfPages, Sort sort);
+
 }

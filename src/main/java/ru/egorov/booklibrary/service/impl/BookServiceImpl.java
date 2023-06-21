@@ -17,6 +17,7 @@ import ru.egorov.booklibrary.repository.BookRepository;
 import ru.egorov.booklibrary.service.AuthorService;
 import ru.egorov.booklibrary.service.BookService;
 import ru.egorov.booklibrary.service.GenreService;
+import ru.egorov.booklibrary.utils.AppUtils;
 import ru.egorov.booklibrary.utils.consts.StringConstants;
 import ru.egorov.booklibrary.web.response.DataResponse;
 
@@ -68,7 +69,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public DataResponse<Book> getAll(int pageNumber, int pageSize, String sortBy, String sortDirection) {
-        Sort sort = getSort(sortBy, sortDirection);
+        Sort sort = AppUtils.getSort(sortBy, sortDirection);
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Book> pagesOfBook = bookRepository.findAll(pageable);
@@ -92,7 +93,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public List<Book> getAllByYearOfIssue(@NotNull Integer year, String cmpr, String sortDir) {
-        Sort sort = getSort(YEAR_OF_ISSUE, sortDir);
+        Sort sort = AppUtils.getSort(YEAR_OF_ISSUE, sortDir);
 
         List<Book> result;
         if (cmpr.equalsIgnoreCase(StringConstants.BEFORE)) {
@@ -109,7 +110,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public List<Book> getAllByNumberOfPages(Integer year, String cmpr, String sortDir) {
-        Sort sort = getSort(NUMBER_OF_PAGES, sortDir);
+        Sort sort = AppUtils.getSort(NUMBER_OF_PAGES, sortDir);
 
         List<Book> result;
         if (cmpr.equalsIgnoreCase(StringConstants.LESS)) {
@@ -153,8 +154,4 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    private Sort getSort(String value, String sortDir) {
-        return sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(value).ascending()
-                : Sort.by(value).descending();
-    }
 }

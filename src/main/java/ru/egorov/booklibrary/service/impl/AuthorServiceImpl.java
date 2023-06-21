@@ -11,6 +11,7 @@ import ru.egorov.booklibrary.domain.entity.Author;
 import ru.egorov.booklibrary.exception.DataNotFoundException;
 import ru.egorov.booklibrary.repository.AuthorRepository;
 import ru.egorov.booklibrary.service.AuthorService;
+import ru.egorov.booklibrary.utils.AppUtils;
 import ru.egorov.booklibrary.web.response.DataResponse;
 
 import java.util.List;
@@ -21,6 +22,9 @@ import java.util.Objects;
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
+
+    private final static String FIRST_NAME = "firstName";
+    private final static String SECOND_NAME = "secondName";
     @Transactional(readOnly = true)
     @Override
     public Author getById(Long id) {
@@ -71,5 +75,21 @@ public class AuthorServiceImpl implements AuthorService {
                 .totalPages(pageAuthors.getTotalPages())
                 .last(pageAuthors.isLast())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Author> getAllByFirstName(String firstName, String sortDir) {
+        Sort sort = AppUtils.getSort(FIRST_NAME, sortDir);
+
+        return authorRepository.findAllByFirstNameContaining(firstName, sort);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Author> getAllBySecondName(String secondName, String sortDir) {
+        Sort sort = AppUtils.getSort(SECOND_NAME, sortDir);
+
+        return authorRepository.findAllByFirstNameContaining(secondName, sort);
     }
 }

@@ -74,4 +74,20 @@ public class AuthorController {
 
         return response;
     }
+
+    @GetMapping("/firstName")
+    public List<AuthorDto> getAllByFirstName(@RequestParam(value = "name", defaultValue = "", required = false) String firstName,
+                                             @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
+        return authorService.getAllByFirstName(firstName, sortDir).stream()
+                .map(authorMapper::toDto)
+                .toList();
+    }
+
+    @GetMapping("/secondName")
+    public List<AuthorDto> getAllBySecondName(@RequestParam(value = "name", defaultValue = "", required = false) String secondName,
+                                             @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
+        return authorService.getAllBySecondName(secondName, sortDir).stream()
+                .map(authorMapper::toDto)
+                .toList();
+    }
 }
