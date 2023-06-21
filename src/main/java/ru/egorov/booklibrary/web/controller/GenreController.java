@@ -69,4 +69,11 @@ public class GenreController {
                 .build();
     }
 
+    @GetMapping("/name")
+    public List<GenreDto> getByName(@RequestParam(value = "name") String name) { // TODO MissingServletRequestParameterException  Required request parameter 'name' for method parameter type String is not present
+        return genreService.getByName(name).stream()
+                .map(genreMapper::toDto)
+                .toList();
+    }
+
 }

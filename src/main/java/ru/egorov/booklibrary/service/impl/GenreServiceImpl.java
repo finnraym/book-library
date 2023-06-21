@@ -30,9 +30,8 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre getByName(String name) {
-        return genreRepository.findByName(name, Sort.by("name"))
-                .orElseThrow(() -> new DataNotFoundException("Genre with name " + name + " not found!"));
+    public List<Genre> getByName(String name) {
+        return genreRepository.findByNameContainingIgnoreCase(name, Sort.by("name"));
     }
 
     @Transactional
