@@ -22,7 +22,6 @@ import java.util.Objects;
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
-
     private final static String FIRST_NAME = "firstName";
     private final static String SECOND_NAME = "secondName";
     @Transactional(readOnly = true)

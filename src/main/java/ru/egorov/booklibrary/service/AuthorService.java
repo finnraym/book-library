@@ -1,6 +1,7 @@
 package ru.egorov.booklibrary.service;
 
 import ru.egorov.booklibrary.domain.entity.Author;
+import ru.egorov.booklibrary.domain.entity.Book;
 import ru.egorov.booklibrary.web.response.DataResponse;
 
 import java.util.List;
@@ -15,5 +16,4 @@ public interface AuthorService {
 
     List<Author> getAllByFirstName(String firstName, String sortDir);
     List<Author> getAllBySecondName(String secondName, String sortDir);
-
 }

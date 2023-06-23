@@ -3,10 +3,14 @@ package ru.egorov.booklibrary.web.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.egorov.booklibrary.domain.entity.Book;
 import ru.egorov.booklibrary.domain.entity.Genre;
+import ru.egorov.booklibrary.service.BookService;
 import ru.egorov.booklibrary.service.GenreService;
 import ru.egorov.booklibrary.utils.consts.WebConstants;
+import ru.egorov.booklibrary.web.dto.BookDto;
 import ru.egorov.booklibrary.web.dto.GenreDto;
+import ru.egorov.booklibrary.web.mapper.BookMapper;
 import ru.egorov.booklibrary.web.mapper.GenreMapper;
 import ru.egorov.booklibrary.web.response.DataResponse;
 import ru.egorov.booklibrary.web.validation.OnCreate;
@@ -21,6 +25,8 @@ public class GenreController {
 
     private final GenreService genreService;
     private final GenreMapper genreMapper;
+    private final BookService bookService;
+    private final BookMapper bookMapper;
 
     @GetMapping("/{id}")
     public GenreDto getById(@PathVariable Long id) {
@@ -73,6 +79,14 @@ public class GenreController {
     public List<GenreDto> getByName(@RequestParam(value = "name", defaultValue = "", required = false) String name) {
         return genreService.getByName(name).stream()
                 .map(genreMapper::toDto)
+                .toList();
+    }
+
+    @GetMapping("/{id}/book")
+    public List<BookDto> getAllBooksByGenreId(@PathVariable Long id) {
+        List<Book> books = bookService.getAllByGenreId(id);
+        return books.stream()
+                .map(bookMapper::toDtoWithoutAuthorsAndGenres)
                 .toList();
     }
 

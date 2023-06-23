@@ -6,10 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.egorov.booklibrary.domain.entity.Author;
+import ru.egorov.booklibrary.domain.entity.Book;
 import ru.egorov.booklibrary.service.AuthorService;
+import ru.egorov.booklibrary.service.BookService;
 import ru.egorov.booklibrary.utils.consts.WebConstants;
 import ru.egorov.booklibrary.web.dto.AuthorDto;
+import ru.egorov.booklibrary.web.dto.BookDto;
 import ru.egorov.booklibrary.web.mapper.AuthorMapper;
+import ru.egorov.booklibrary.web.mapper.BookMapper;
 import ru.egorov.booklibrary.web.response.DataResponse;
 import ru.egorov.booklibrary.web.validation.OnCreate;
 import ru.egorov.booklibrary.web.validation.OnUpdate;
@@ -23,6 +27,8 @@ import java.util.List;
 public class AuthorController {
     private final AuthorService authorService;
     private final AuthorMapper authorMapper;
+    private final BookMapper bookMapper;
+    private final BookService bookService;
 
     @GetMapping("/{id}")
     public AuthorDto getById(@PathVariable Long id) {
@@ -88,6 +94,14 @@ public class AuthorController {
                                              @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
         return authorService.getAllBySecondName(secondName, sortDir).stream()
                 .map(authorMapper::toDto)
+                .toList();
+    }
+
+    @GetMapping("/{id}/book")
+    public List<BookDto> getBooksByAuthorId(@PathVariable Long id) {
+        List<Book> books = bookService.getAllByAuthorId(id);
+        return books.stream()
+                .map(bookMapper::toDtoWithoutAuthorsAndGenres)
                 .toList();
     }
 }

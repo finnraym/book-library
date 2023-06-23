@@ -10,4 +10,13 @@ public interface BookMapper {
     Book toEntity(BookDto bookDto);
 
     BookDto toDto(Book book);
+
+    default BookDto toDtoWithoutAuthorsAndGenres(Book book) {
+        return BookDto.builder()
+                .id(book.getId())
+                .name(book.getName())
+                .yearOfIssue(book.getYearOfIssue())
+                .numberOfPages(book.getNumberOfPages())
+                .build();
+    }
 }

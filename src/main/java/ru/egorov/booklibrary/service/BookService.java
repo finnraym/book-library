@@ -20,4 +20,6 @@ public interface BookService {
     boolean addGenreForBook(Long bookId, Long genreId);
     boolean addAuthorForBook(Long bookId, Long authorId);
 
+    List<Book> getAllByAuthorId(Long id);
+    List<Book> getAllByGenreId(Long id);
 }

@@ -154,4 +154,16 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<Book> getAllByAuthorId(Long id) {
+        return bookRepository.findAllByAuthorId(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Book> getAllByGenreId(Long id) {
+        return bookRepository.findAllByGenreId(id);
+    }
+
 }
