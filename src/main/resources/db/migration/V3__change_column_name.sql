@@ -1,0 +1,1 @@
+ALTER TABLE develop.book RENAME COLUMN name TO title;

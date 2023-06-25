@@ -14,7 +14,7 @@ public interface BookMapper {
     default BookDto toDtoWithoutAuthorsAndGenres(Book book) {
         return BookDto.builder()
                 .id(book.getId())
-                .name(book.getName())
+                .title(book.getTitle())
                 .yearOfIssue(book.getYearOfIssue())
                 .numberOfPages(book.getNumberOfPages())
                 .build();

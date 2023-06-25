@@ -53,7 +53,7 @@ public class BookServiceImpl implements BookService {
     public Book updateBook(Book book) {
         Book updatedBook = getById(book.getId());
 
-        updatedBook.setName(book.getName());
+        updatedBook.setTitle(book.getTitle());
         updatedBook.setYearOfIssue(book.getYearOfIssue());
         updatedBook.setNumberOfPages(book.getNumberOfPages());
 
@@ -72,6 +72,7 @@ public class BookServiceImpl implements BookService {
         Sort sort = AppUtils.getSort(sortBy, sortDirection);
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
         Page<Book> pagesOfBook = bookRepository.findAll(pageable);
 
         return DataResponse.<Book>builder()
@@ -86,8 +87,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Book> getAllByName(String name) {
-        return bookRepository.findAllByNameContainingIgnoreCase(name, Sort.by("name"));
+    public List<Book> getAllByTitle(String name) {
+        return bookRepository.findAllByTitleContainingIgnoreCase(name, Sort.by("name"));
     }
 
     @Transactional(readOnly = true)

@@ -81,8 +81,8 @@ public class BookController {
     }
 
     @GetMapping("/name")
-    public List<BookDto> getByName(@RequestParam(value = "name", defaultValue = "", required = false) String name) {
-        return bookService.getAllByName(name).stream()
+    public List<BookDto> getByTitle(@RequestParam(value = "title", defaultValue = "", required = false) String title) {
+        return bookService.getAllByTitle(title).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }

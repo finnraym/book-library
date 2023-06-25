@@ -1,6 +1,8 @@
 package ru.egorov.booklibrary.repository;
 
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,8 +12,7 @@ import ru.egorov.booklibrary.domain.entity.Book;
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
-
-    List<Book> findAllByNameContainingIgnoreCase(@NotNull String name, Sort sort);
+    List<Book> findAllByTitleContainingIgnoreCase(@NotNull String title, Sort sort);
 
     List<Book> findAllByYearOfIssueEquals(Integer year, Sort sort);
 

@@ -17,7 +17,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    private String name;
+    private String title;
     @NotNull
     @Column(name = "year_of_issue")
     private Integer yearOfIssue;

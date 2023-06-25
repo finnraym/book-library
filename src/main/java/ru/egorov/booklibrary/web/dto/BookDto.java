@@ -15,8 +15,8 @@ public class BookDto {
 
     @NotNull(message = "Id must be not null.", groups = OnUpdate.class)
     private Long id;
-    @NotNull(message = "Book's name must not be null.")
-    private String name;
+    @NotNull(message = "Book's title must not be null.")
+    private String title;
     @NotNull(message = "Year of issue must not be null.")
     private Integer yearOfIssue;
     @NotNull(message = "Number of pages must not be null.")

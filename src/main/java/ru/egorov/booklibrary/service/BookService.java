@@ -13,7 +13,7 @@ public interface BookService {
     void deleteBookById(Long id);
     DataResponse<Book> getAll(int pageNumber, int pageSize, String sortBy, String sortDirection);
 
-    List<Book> getAllByName(String name);
+    List<Book> getAllByTitle(String title);
     List<Book> getAllByYearOfIssue(Integer year, String cmpr, String sort);
 
     List<Book> getAllByNumberOfPages(Integer year, String cmpr, String sort);

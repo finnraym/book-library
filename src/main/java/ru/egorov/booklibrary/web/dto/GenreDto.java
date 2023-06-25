@@ -1,5 +1,6 @@
 package ru.egorov.booklibrary.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import java.util.Objects;
 
 @Data
 @Builder(toBuilder = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GenreDto {
     @NotNull(message = "Id must be not null.", groups = OnUpdate.class)
     private Long id;
