@@ -1,5 +1,7 @@
 package ru.egorov.booklibrary.web.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/book")
 @RequiredArgsConstructor
+@Validated
 public class BookController {
 
     private final BookService bookService;
@@ -60,8 +63,8 @@ public class BookController {
 
     @GetMapping("/all")
     public DataResponse<BookDto> getAll(
-            @RequestParam(value = "pageNo", defaultValue = WebConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = WebConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @Valid @RequestParam(value = "pageNo", defaultValue = WebConstants.DEFAULT_PAGE_NUMBER, required = false) @Min(value = 0, message = "Page index must not be less than zero") int pageNo,
+            @Valid @RequestParam(value = "pageSize", defaultValue = WebConstants.DEFAULT_PAGE_SIZE, required = false) @Min(value = 1, message = "Page size must not be less than one") int pageSize,
             @RequestParam(value = "sortBy", defaultValue = WebConstants.DEFAULT_SORT_BY, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
     ) {
@@ -88,7 +91,7 @@ public class BookController {
     }
 
     @GetMapping("/yearOfIssue")
-    public List<BookDto> getByYearOfIssue(@RequestParam(value = "year") Integer year, // TODO MissingServletRequestParameterException need handle: Required request parameter 'year' for method parameter type Integer is not present
+    public List<BookDto> getByYearOfIssue(@RequestParam(value = "year") Integer year,
                                           @RequestParam(value = "cmpr", defaultValue = StringConstants.EQUALS, required = false) String cmpr,
                                           @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
         return bookService.getAllByYearOfIssue(year, cmpr, sortDir).stream()
@@ -97,7 +100,7 @@ public class BookController {
     }
 
     @GetMapping("/numberOfPages")
-    public List<BookDto> getByNumberOfPages(@RequestParam(value = "pages") Integer pages, // TODO MissingServletRequestParameterException need handle: Required request parameter 'year' for method parameter type Integer is not present
+    public List<BookDto> getByNumberOfPages(@RequestParam(value = "pages") Integer pages,
                                             @RequestParam(value = "cmpr", defaultValue = StringConstants.EQUALS, required = false) String cmpr,
                                             @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
         return bookService.getAllByNumberOfPages(pages, cmpr, sortDir).stream()

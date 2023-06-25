@@ -63,7 +63,7 @@ public class AuthorServiceImpl implements AuthorService {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort); // TODO PropertyReferenceException need handle
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Author> pageAuthors = authorRepository.findAll(pageable);
 
         return DataResponse.<Author>builder()
