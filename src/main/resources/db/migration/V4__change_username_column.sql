@@ -1,0 +1,1 @@
+ALTER TABLE develop.users ADD CONSTRAINT username_unique UNIQUE (username);

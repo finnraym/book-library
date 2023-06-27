@@ -38,6 +38,12 @@ public class MainControllerExceptionHandler {
         return new ExceptionResponse(ex.getMessage());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse handleIllegalArgumentException(IllegalArgumentException ex) {
+        return new ExceptionResponse(ex.getMessage());
+    }
+
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handleIllegalStateException(IllegalStateException ex) {
