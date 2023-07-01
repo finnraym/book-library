@@ -1,6 +1,9 @@
 package ru.egorov.booklibrary.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.egorov.booklibrary.domain.entity.Book;
@@ -19,8 +22,10 @@ import ru.egorov.booklibrary.web.validation.OnUpdate;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/genre")
+@RequestMapping("api/v1/genres")
 @RequiredArgsConstructor
+@Validated
+@Tag(name = "Genre controller", description = "Genre API")
 public class GenreController {
 
     private final GenreService genreService;
@@ -29,12 +34,15 @@ public class GenreController {
     private final BookMapper bookMapper;
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get genre by id")
     public GenreDto getById(@PathVariable Long id) {
         Genre entity = genreService.getById(id);
         return genreMapper.toDto(entity);
     }
 
     @PostMapping
+    @Operation(summary = "Add new genre")
+    @PreAuthorize("hasRole('ADMIN')")
     public GenreDto addNewGenre(@Validated(OnCreate.class) @RequestBody GenreDto genreDto) {
         Genre genre = genreMapper.toEntity(genreDto);
         Genre entity = genreService.saveNewGenre(genre);
@@ -42,6 +50,8 @@ public class GenreController {
     }
 
     @PutMapping
+    @Operation(summary = "Update genre")
+    @PreAuthorize("hasRole('ADMIN')")
     public GenreDto updateGenre(@Validated(OnUpdate.class) @RequestBody GenreDto genreDto) {
         Genre genre = genreMapper.toEntity(genreDto);
         Genre entity = genreService.updateGenre(genre);
@@ -49,11 +59,14 @@ public class GenreController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete genre")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteGenre(@PathVariable Long id) {
         genreService.deleteGenreById(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping
+    @Operation(summary = "Get all genres")
     public DataResponse<GenreDto> getAll(
             @RequestParam(value = "pageNo", defaultValue = WebConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = WebConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
@@ -76,13 +89,15 @@ public class GenreController {
     }
 
     @GetMapping("/name")
+    @Operation(summary = "Get genres by name")
     public List<GenreDto> getByName(@RequestParam(value = "name", defaultValue = "", required = false) String name) {
         return genreService.getByName(name).stream()
                 .map(genreMapper::toDto)
                 .toList();
     }
 
-    @GetMapping("/{id}/book")
+    @GetMapping("/{id}/books")
+    @Operation(summary = "Get books by genre id")
     public List<BookDto> getAllBooksByGenreId(@PathVariable Long id) {
         List<Book> books = bookService.getAllByGenreId(id);
         return books.stream()

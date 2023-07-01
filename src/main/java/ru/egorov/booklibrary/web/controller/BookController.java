@@ -1,8 +1,11 @@
 package ru.egorov.booklibrary.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.egorov.booklibrary.domain.entity.Book;
@@ -18,21 +21,25 @@ import ru.egorov.booklibrary.web.validation.OnUpdate;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/book")
+@RequestMapping("api/v1/books")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Book controller", description = "Book API")
 public class BookController {
 
     private final BookService bookService;
     private final BookMapper bookMapper;
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get book by id")
     public BookDto getById(@PathVariable Long id) {
         Book entity = bookService.getById(id);
         return bookMapper.toDto(entity);
     }
 
     @PostMapping
+    @Operation(summary = "Add new book")
+    @PreAuthorize("hasRole('ADMIN')")
     public BookDto addNewBook(@Validated(OnCreate.class) @RequestBody BookDto bookDto) {
         Book newBook = bookMapper.toEntity(bookDto);
         Book entity = bookService.saveNewBook(newBook);
@@ -40,6 +47,8 @@ public class BookController {
     }
 
     @PutMapping
+    @Operation(summary = "Update book")
+    @PreAuthorize("hasRole('ADMIN')")
     public BookDto updateBook(@Validated(OnUpdate.class) @RequestBody BookDto bookDto) {
         Book updatedBook = bookMapper.toEntity(bookDto);
         Book entity = bookService.updateBook(updatedBook);
@@ -47,21 +56,28 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete book")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteById(@PathVariable Long id) {
         bookService.deleteBookById(id);
     }
 
-    @PatchMapping("/{bookId}/author/{authorId}")
+    @PatchMapping("/{bookId}/authors/{authorId}")
+    @Operation(summary = "Add author for book")
+    @PreAuthorize("hasRole('ADMIN')")
     public Boolean addAuthorForBook(@PathVariable Long bookId, @PathVariable Long authorId) {
         return bookService.addAuthorForBook(bookId, authorId);
     }
 
-    @PatchMapping("/{bookId}/genre/{genreId}")
+    @PatchMapping("/{bookId}/genres/{genreId}")
+    @Operation(summary = "Add genre for book")
+    @PreAuthorize("hasRole('ADMIN')")
     public Boolean addGenreForBook(@PathVariable Long bookId, @PathVariable Long genreId) {
         return bookService.addGenreForBook(bookId, genreId);
     }
 
-    @GetMapping("/all")
+    @GetMapping
+    @Operation(summary = "Get all books")
     public DataResponse<BookDto> getAll(
             @Valid @RequestParam(value = "pageNo", defaultValue = WebConstants.DEFAULT_PAGE_NUMBER, required = false) @Min(value = 0, message = "Page index must not be less than zero") int pageNo,
             @Valid @RequestParam(value = "pageSize", defaultValue = WebConstants.DEFAULT_PAGE_SIZE, required = false) @Min(value = 1, message = "Page size must not be less than one") int pageSize,
@@ -84,6 +100,7 @@ public class BookController {
     }
 
     @GetMapping("/name")
+    @Operation(summary = "Get books by title")
     public List<BookDto> getByTitle(@RequestParam(value = "title", defaultValue = "", required = false) String title) {
         return bookService.getAllByTitle(title).stream()
                 .map(bookMapper::toDto)
@@ -91,6 +108,7 @@ public class BookController {
     }
 
     @GetMapping("/yearOfIssue")
+    @Operation(summary = "Get books by year of issue")
     public List<BookDto> getByYearOfIssue(@RequestParam(value = "year") Integer year,
                                           @RequestParam(value = "cmpr", defaultValue = StringConstants.EQUALS, required = false) String cmpr,
                                           @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
@@ -100,6 +118,7 @@ public class BookController {
     }
 
     @GetMapping("/numberOfPages")
+    @Operation(summary = "Get books by number of pages")
     public List<BookDto> getByNumberOfPages(@RequestParam(value = "pages") Integer pages,
                                             @RequestParam(value = "cmpr", defaultValue = StringConstants.EQUALS, required = false) String cmpr,
                                             @RequestParam(value = "sortDir", defaultValue = WebConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
