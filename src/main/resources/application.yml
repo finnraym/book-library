@@ -22,3 +22,12 @@ security:
     secret: c3VwZXJwdXBlcmR1cGVybWVnYWhhcmRvdmVydG9waGlnaHNlY3JldA==
     access: 3600000
     refresh: 2592000000
+
+logging:
+  level:
+    ru.egorov.booklibrary : INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  file:
+    name: 'app.log'
