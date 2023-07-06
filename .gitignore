@@ -18,3 +18,5 @@ target/
 *.iml
 *.ipr
 .mvn
+
+*.log
