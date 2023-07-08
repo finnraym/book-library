@@ -21,6 +21,7 @@ import ru.egorov.booklibrary.utils.AppUtils;
 import ru.egorov.booklibrary.utils.consts.StringConstants;
 import ru.egorov.booklibrary.web.response.DataResponse;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -132,6 +133,9 @@ public class BookServiceImpl implements BookService {
 
         Set<Genre> bookGenres = updatedBook.getGenres();
 
+        if (bookGenres == null) {
+            bookGenres = new HashSet<>();
+        }
         Genre genre = genreService.getById(genreId);
         if (!bookGenres.contains(genre)) {
             return bookGenres.add(genre);
@@ -146,6 +150,8 @@ public class BookServiceImpl implements BookService {
         Book updatedBook = getById(bookId);
 
         Set<Author> bookAuthors = updatedBook.getAuthors();
+
+        if (bookAuthors == null) bookAuthors = new HashSet<>();
 
         Author author = authorService.getById(authorId);
         if (!bookAuthors.contains(author)) {

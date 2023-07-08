@@ -89,6 +89,6 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> getAllBySecondName(String secondName, String sortDir) {
         Sort sort = AppUtils.getSort(SECOND_NAME, sortDir);
 
-        return authorRepository.findAllByFirstNameContaining(secondName, sort);
+        return authorRepository.findAllBySecondNameContaining(secondName, sort);
     }
 }

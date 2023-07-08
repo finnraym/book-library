@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -35,4 +36,17 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private Set<Genre> genres;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id.equals(book.id) && title.equals(book.title) && yearOfIssue.equals(book.yearOfIssue) && numberOfPages.equals(book.numberOfPages);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, yearOfIssue, numberOfPages);
+    }
 }
