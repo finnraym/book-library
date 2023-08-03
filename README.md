@@ -77,6 +77,84 @@ REST API по добавлению, удалению, редактировани
 Для просмотра полного функционала приложения: 
 http://localhost:8088/swagger-ui/index.html
 
+### Аутентификация
+
+Аутентификация в приложении производится при помощи Jason Web Token (JWT).
+
+#### POST `/api/v1/auth/register`
+
+Регистрация нового пользователя без административных прав. Данные передаются в теле запроса в формате JSON:
+
+```
+{
+    "username": user@mail.com",
+    "password": user1234,
+    "confirmedPassword": user1234
+}
+```
+
+Пример ответа:
+```
+{
+    "id": 1,
+    "username": user@mail.com",
+    "password": user1234
+}
+```
+HTTP коды ответов:
+- Успех - 200
+- Некорректные данные в запросе (не совпали пароли) - 400
+- Ошибка (например, база данных недоступна) - 500
+
+#### POST `/api/v1/auth/login`
+
+Вход в приложение под именем и паролем пользователя. Данные передаются в теле запроса в формате JSON:
+
+```
+{
+    "username": user@mail.com",
+    "password": user1234
+}
+```
+
+Пример ответа:
+```
+{
+    "id": 1,
+    "username": user@mail.com",
+    "accessToken": eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c,
+    "refreshToken": eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c,
+}
+```
+HTTP коды ответов:
+- Успех - 200
+- Некорректные данные в запросе - 400
+- Ошибка авторизации - 401
+- Ошибка (например, база данных недоступна) - 500
+
+#### POST `/api/v1/auth/refresh`
+
+Обновление access token по refresh token. Рефреш токен передается в теле запроса:
+
+```
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+```
+
+Пример ответа:
+```
+{
+    "id": 1,
+    "username": "user@mail.com",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+}
+```
+HTTP коды ответов:
+- Успех - 200
+- Некорректные данные в запросе - 400
+- Ошибка авторизации - 401
+- Ошибка (например, база данных недоступна) - 500
+
 ### Книги
 
 #### GET `/api/v1/books`
